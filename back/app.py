@@ -15,7 +15,6 @@ load_dotenv()
 app = FastAPI()
 
 DATABASE_URL = os.getenv("LOCAL_POSTGRES_URL")
-print(DATABASE_URL)
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
 finance_data = Table("finance_data", metadata, autoload_with=engine)
