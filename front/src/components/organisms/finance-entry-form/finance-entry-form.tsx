@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import { SaveEntryActionResponse } from "@/types/save-entry-form";
 import React, { useActionState, useEffect } from "react";
@@ -47,7 +46,7 @@ const FinanceEntryForm = () => {
         title: "Success",
         description: state.message,
       });
-    } else {
+    } else if (state.message || state.errors) {
       toast({
         variant: "destructive",
         title: "Error",
@@ -57,38 +56,31 @@ const FinanceEntryForm = () => {
   }, [state]);
 
   return (
-    <Tabs defaultValue="expense" className="w-[400px]">
-      <TabsList className="grid w-full grid-cols-2 hidden">
-        <TabsTrigger value="expense">Expense</TabsTrigger>
-      </TabsList>
-      <TabsContent value="expense">
-        <Card>
-          <CardHeader>
-            <CardTitle>Expense</CardTitle>
-            <CardDescription>
-              Add your expense to keep track of your finances
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-2">
-            <form action={formAction}>
-              <FloatInputForm
-                label="Amount"
-                htmlFor="amount"
-                placeholder="Add your expense"
-                error={state.errors?.amount}
-              />
-              <SelectForm
-                label="Type"
-                htmlFor="type"
-                placeholder="Select a type"
-                error={state.errors?.type}
-              />
-              <SubmitButton />
-            </form>
-          </CardContent>
-        </Card>
-      </TabsContent>
-    </Tabs>
+    <Card>
+      <CardHeader>
+        <CardTitle>Add</CardTitle>
+        <CardDescription>
+          your expense to keep track of your finances
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="space-y-2">
+        <form action={formAction}>
+          <FloatInputForm
+            label="Amount"
+            htmlFor="amount"
+            placeholder="Add your expense"
+            error={state.errors?.amount}
+          />
+          <SelectForm
+            label="Type"
+            htmlFor="type"
+            placeholder="Select a type"
+            error={state.errors?.type}
+          />
+          <SubmitButton />
+        </form>
+      </CardContent>
+    </Card>
   );
 };
 

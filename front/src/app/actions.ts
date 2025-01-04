@@ -5,6 +5,7 @@ import {
   SaveEntryActionResponse,
   SaveEntryFormData,
 } from "@/types/save-entry-form";
+import { FinancyService } from "@/services/Financy.service";
 
 const saveEntrySchema = z.object({
   amount: z
@@ -27,6 +28,7 @@ export async function saveEntry(
   prevState: SaveEntryActionResponse | null,
   formData: FormData
 ): Promise<SaveEntryActionResponse> {
+  const service = FinancyService.getInstance();
   try {
     const amountString = formData.get("amount") as string;
 
@@ -35,7 +37,6 @@ export async function saveEntry(
       type: formData.get("type") as string,
     };
 
-    // Validate the form data
     const validatedData = saveEntrySchema.safeParse(rawData);
 
     if (!validatedData.success) {
@@ -46,16 +47,21 @@ export async function saveEntry(
       };
     }
 
-    // Here you would typically save the address to your database
+    const data = await service.saveEntry({
+      user_id: "d09bd4f7-e50c-486c-8b04-93c6540f48bb",
+      time: new Date().getTime() / 1000,
+      amount: validatedData.data.amount,
+      type: validatedData.data.type,
+    });
 
     return {
       success: true,
-      message: "Address saved successfully!",
+      message: data.message || "Address saved successfully!",
     };
   } catch (error) {
     return {
       success: false,
-      message: "An unexpected error occurred",
+      message: (error as Error).message,
     };
   }
 }

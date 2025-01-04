@@ -1,9 +1,9 @@
-import FinanceEntryForm from "@/components/organisms/finance-entry-form/finance-entry-form";
+import FinanceTemplate from "@/components/templates/finance-template";
 
 const page = () => {
   return (
     <div className="w-full h-screen my-auto flex items-center justify-center">
-      <FinanceEntryForm />
+      <FinanceTemplate />
     </div>
   );
 };
