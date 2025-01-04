@@ -1,12 +1,4 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
-import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Select,
   SelectContent,
@@ -14,50 +6,41 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { financeOptions } from "@/utils/constants";
+import { financeOptions } from "@/lib/constants";
 import React from "react";
 
 type SelectFormProps = {
   label: string;
-  description: string;
   placeholder: string;
-  formName: string;
-  formControl: any;
+  htmlFor: string;
+  error?: string[];
 };
 
 const SelectForm = ({
   label,
-  description,
   placeholder,
-  formName,
-  formControl,
+  htmlFor,
+  error,
 }: SelectFormProps) => {
   return (
-    <FormField
-      control={formControl}
-      name={formName}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Select onValueChange={field.onChange} defaultValue={field.value}>
-              <SelectTrigger>
-                <SelectValue placeholder={placeholder} />
-              </SelectTrigger>
-              <SelectContent>
-                {Object.entries(financeOptions).map(([key, value]) => (
-                  <SelectItem key={key} value={key}>
-                    {value}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </FormControl>
-          <FormDescription>{description}</FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="mb-4 flex w-full flex-col gap-2">
+      <Label htmlFor={htmlFor} className="font-semibold">
+        {label}
+      </Label>
+      <Select name={htmlFor}>
+        <SelectTrigger form="" name={htmlFor} id={htmlFor}>
+          <SelectValue placeholder={placeholder} />
+        </SelectTrigger>
+        <SelectContent>
+          {Object.entries(financeOptions).map(([key, value]) => (
+            <SelectItem key={key} value={key}>
+              {value}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
+      {error && <p className="text-red-500 text-sm mt-1">{error.join(", ")}</p>}
+    </div>
   );
 };
 

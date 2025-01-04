@@ -1,50 +1,37 @@
-import {
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import React from "react";
 
 type FloatInputFormProps = {
   label: string;
-  description: string;
   placeholder: string;
-  formName: string;
-  formControl: any;
+  htmlFor: string;
+  error?: string[];
 };
 
 const FloatInputForm = ({
   label,
-  description,
   placeholder,
-  formName,
-  formControl,
+  htmlFor,
+  error,
 }: FloatInputFormProps) => {
   return (
-    <FormField
-      control={formControl}
-      name={formName}
-      render={({ field }) => (
-        <FormItem>
-          <FormLabel>{label}</FormLabel>
-          <FormControl>
-            <Input
-              type="number"
-              inputMode="decimal"
-              placeholder={placeholder}
-              step="0.1"
-              {...field}
-            />
-          </FormControl>
-          <FormDescription>{description}</FormDescription>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <div className="mb-4 flex w-full flex-col gap-2">
+      <Label htmlFor={htmlFor} className="font-semibold">
+        {label}
+      </Label>
+      <Input
+        name={htmlFor}
+        id={htmlFor}
+        type="number"
+        inputMode="decimal"
+        placeholder={placeholder}
+        step="0.1"
+        min="0"
+        max="1000000"
+      />
+      {error && <p className="text-red-500 text-sm mt-1">{error.join(", ")}</p>}
+    </div>
   );
 };
 
