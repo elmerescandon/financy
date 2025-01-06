@@ -4,7 +4,8 @@ export interface FinancyResponse {
 }
 
 export interface FinancyEntry {
-  user_id: string;
+  id?: string;
+  user_id?: string;
   time: number;
   amount: number;
   type: string;

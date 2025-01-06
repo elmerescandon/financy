@@ -22,7 +22,7 @@ export class FinancyService {
       const data = await response.json();
 
       if (data.entries) {
-        return data.entries;
+        return data;
       } else {
         throw new Error(data.message);
       }

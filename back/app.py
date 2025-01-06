@@ -43,8 +43,8 @@ def get_entries(user_id: str):
         print(user_id)
         query = finance_data.select().where(finance_data.c.user_id == user_id).order_by(finance_data.c.time.desc()).limit(10)
         
-        print(query)
         result = session.execute(query).fetchall()
+        print(result)
         entries = [
             {
                 "id": row[0],
@@ -62,7 +62,7 @@ def get_entries(user_id: str):
         return JSONResponse(status_code=200, content={"entries": entries, "message": "Entries fetched successfully"})	
 
     except Exception as e:
-        return JSONResponse(status_code=500, content={"message": "Server error, try again later"})
+        return JSONResponse(status_code=500, content={"message":str(e)})
 
 
 

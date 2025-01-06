@@ -1,6 +1,7 @@
 import React from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "../ui/tabs";
 import FinanceEntryForm from "../organisms/finance-entry-form/finance-entry-form";
+import FinanceEntryView from "../organisms/finance-entry-view/finance-entry-view";
 
 const FinanceTemplate = () => {
   return (
@@ -12,7 +13,9 @@ const FinanceTemplate = () => {
       <TabsContent value="add">
         <FinanceEntryForm />
       </TabsContent>
-      <TabsContent value="view">{/* <FinanceEntryForm /> */}</TabsContent>
+      <TabsContent value="view">
+        <FinanceEntryView />
+      </TabsContent>
     </Tabs>
   );
 };

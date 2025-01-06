@@ -56,9 +56,9 @@ const FinanceEntryForm = () => {
   }, [state]);
 
   return (
-    <Card>
+    <Card className="border-none shadow-none">
       <CardHeader>
-        <CardTitle>Add</CardTitle>
+        <CardTitle className="text-3xl">Add</CardTitle>
         <CardDescription>
           your expense to keep track of your finances
         </CardDescription>
