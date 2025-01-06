@@ -53,7 +53,7 @@ const FinanceEntryForm = () => {
         description: state.message,
       });
     }
-  }, [state]);
+  }, [state, toast]);
 
   return (
     <Card className="border-none shadow-none">
