@@ -2,8 +2,8 @@ from pydantic import BaseModel
 from typing import Optional
 
 class FinanceEntry(BaseModel):
-    user_id: int
-    time: int
-    note: Optional[str] = None
+    user_id: str
+    time: float
     amount: float
     type: str
+    note: Optional[str] = None

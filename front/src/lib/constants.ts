@@ -1,0 +1,16 @@
+export const financeOptions = {
+  breakfast: "Desayuno",
+  lunch: "Almuerzo",
+  dinner: "Cena",
+  snack: "Bocado",
+  cloth: "Ropa",
+  bus: "Bus",
+  taxi: "Taxi",
+  productivity: "Trabajo",
+  health: "Salud",
+  party: "Fiesta",
+  date: "Cita",
+  goOut: "Salida",
+  selfCare: "Cuidado",
+  decoration: "Deco",
+};
