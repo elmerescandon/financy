@@ -18,8 +18,7 @@ export const columns: ColumnDef<Expense>[] = [
     header: "Time",
     cell: ({ row }) => {
       const time = parseFloat(row.getValue("time")) * 1000;
-      const limaTimeZoneOffset = new Date().getTimezoneOffset() * 60000;
-      const limaTime = new Date(time - limaTimeZoneOffset);
+      const limaTime = new Date(time);
       return limaTime.toLocaleString("en-US", {
         weekday: "short",
         year: "2-digit",
