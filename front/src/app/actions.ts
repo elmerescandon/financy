@@ -6,6 +6,7 @@ import {
   SaveEntryFormData,
 } from "@/types/save-entry-form";
 import { FinancyService } from "@/services/Financy.service";
+import { revalidatePath } from "next/cache";
 
 const saveEntrySchema = z.object({
   amount: z
@@ -54,6 +55,7 @@ export async function saveEntry(
       type: validatedData.data.type,
     });
 
+    revalidatePath("/view");
     return {
       success: true,
       message: data.message || "Address saved successfully!",
