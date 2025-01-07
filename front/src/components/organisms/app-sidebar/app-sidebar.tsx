@@ -14,7 +14,7 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Add new",
+    title: "Add",
     url: "/add",
     icon: PlusCircleIcon,
   },
