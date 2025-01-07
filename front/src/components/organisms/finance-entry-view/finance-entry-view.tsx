@@ -10,6 +10,8 @@ import React from "react";
 import { columns } from "../expenses-table/columns";
 import { ExpensesTable } from "../expenses-table/expenses-table";
 
+export const revalidate = 0;
+
 const FinanceEntryView = async () => {
   try {
     const service = FinancyService.getInstance();
