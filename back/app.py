@@ -37,16 +37,7 @@ def get_entries(user_id: str):
     """
         Get the last 10 entries from the database
     """
-    
-    # Just for development
-    #     {
-    #     "id": row[0],
-    #     "amount": row[2],
-    #     "time": row[3].timestamp(),
-    #     "type": row[4],
-    #     "finance_type": row[5],
-    #     "note": row[6],
-    # }
+
     try:
         print(user_id)
         query = finance_data.select().where(
@@ -55,18 +46,19 @@ def get_entries(user_id: str):
         ).order_by(finance_data.c.time.desc()).limit(10)
         
         result = session.execute(query).fetchall()
+        columns = finance_data.columns.keys()
+        column_index_map = {column: index for index, column in enumerate(columns)}
         entries = [
             {
-                "id": row[0],
-                "time": row[1].timestamp(),
-                "amount": row[2],
-                "type": row[3],
-                "note": row[4],
-                "finance_type": row[6],
+                "id": row[column_index_map["id"]],	
+                "time": row[column_index_map["time"]].timestamp(),
+                "amount": row[column_index_map["amount"]],
+                "type": row[column_index_map["type"]],
+                "note": row[column_index_map["note"]],
+                "finance_type": row[column_index_map["finance_type"]],
             }
             for row in result
         ]
-        print(entries)
 
         if not entries:
             return JSONResponse(status_code=404, content={"message": "No entries found"})
