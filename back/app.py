@@ -37,7 +37,16 @@ def get_entries(user_id: str):
     """
         Get the last 10 entries from the database
     """
-
+    
+    # Just for development
+    #     {
+    #     "id": row[0],
+    #     "amount": row[2],
+    #     "time": row[3].timestamp(),
+    #     "type": row[4],
+    #     "finance_type": row[5],
+    #     "note": row[6],
+    # }
     try:
         print(user_id)
         query = finance_data.select().where(
@@ -49,11 +58,11 @@ def get_entries(user_id: str):
         entries = [
             {
                 "id": row[0],
+                "time": row[1].timestamp(),
                 "amount": row[2],
-                "time": row[3].timestamp(),
-                "type": row[4],
-                "finance_type": row[5],
-                "note": row[6],
+                "type": row[3],
+                "note": row[4],
+                "finance_type": row[6],
             }
             for row in result
         ]
