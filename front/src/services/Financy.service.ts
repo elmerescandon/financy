@@ -15,10 +15,10 @@ export class FinancyService {
   }
 
   // Method to get financial data from an API
-  async getEntries(userId: string): Promise<FinancyResponse> {
+  async getExpenses(userId: string): Promise<FinancyResponse> {
     try {
       const url = process.env.NEXT_PUBLIC_PANDORA_API_ENDPOINT;
-      const response = await fetch(`${url}/get-entries/${userId}`);
+      const response = await fetch(`${url}/get-expenses/${userId}`);
       const data = await response.json();
 
       if (data.entries) {
@@ -41,8 +41,10 @@ export class FinancyService {
         },
         body: JSON.stringify(entry),
       });
+      if (response.status !== 201) {
+        throw new Error("Failed to save entry");
+      }
       const data = await response.json();
-      console.log(data);
       return data;
     } catch (error) {
       throw error;

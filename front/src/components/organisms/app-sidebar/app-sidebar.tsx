@@ -14,12 +14,12 @@ import {
 // Menu items.
 const items = [
   {
-    title: "Add",
+    title: "Add Expense",
     url: "/add",
     icon: PlusCircleIcon,
   },
   {
-    title: "View",
+    title: "View Expenses",
     url: "/view",
     icon: BookOpen,
   },

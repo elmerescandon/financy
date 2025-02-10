@@ -24,11 +24,16 @@ const SelectForm = ({
 }: SelectFormProps) => {
   return (
     <div className="mb-4 flex w-full flex-col gap-2">
-      <Label htmlFor={htmlFor} className="font-semibold">
+      <Label htmlFor={htmlFor} className="font-semibold max-md:text-base">
         {label}
       </Label>
       <Select name={htmlFor}>
-        <SelectTrigger form="" name={htmlFor} id={htmlFor}>
+        <SelectTrigger
+          form=""
+          name={htmlFor}
+          id={htmlFor}
+          className="max-md:py-6 max-md:text-base"
+        >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>

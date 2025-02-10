@@ -33,7 +33,7 @@ def read_root():
 Session = sessionmaker(bind=engine)
 session = Session()
 
-@app.get("/get-entries/{user_id}")
+@app.get("/get-expenses/{user_id}")
 def get_entries(user_id: str):
     """
         Get the last 10 entries from the database
@@ -41,20 +41,24 @@ def get_entries(user_id: str):
 
     try:
         print(user_id)
-        query = finance_data.select().where(finance_data.c.user_id == user_id).order_by(finance_data.c.time.desc()).limit(10)
+        query = finance_data.select().where(
+            (finance_data.c.user_id == user_id) & 
+            (finance_data.c.finance_type == 'expense')
+        ).order_by(finance_data.c.time.desc()).limit(10)
         
         result = session.execute(query).fetchall()
-        print(result)
         entries = [
             {
                 "id": row[0],
-                "time": row[1].timestamp(),
                 "amount": row[2],
-                "type": row[3],
-                "note": row[4],
+                "time": row[3].timestamp(),
+                "type": row[4],
+                "finance_type": row[5],
+                "note": row[6],
             }
             for row in result
         ]
+        print(entries)
 
         if not entries:
             return JSONResponse(status_code=404, content={"message": "No entries found"})
@@ -69,14 +73,16 @@ def get_entries(user_id: str):
 
 @app.post("/save-entry")
 def save_entry(entry: FinanceEntry):
-    try: 
+    try:  
+        print(entry)
         user_id = uuid.UUID(entry.user_id)
         insert_stmt = finance_data.insert().values(
             time=datetime.datetime.fromtimestamp(float(entry.time)),
             note=entry.note,
             amount=entry.amount,
             type=entry.type,
-            user_id=user_id
+            user_id=user_id,
+            finance_type=entry.finance_type
         )
         session.execute(insert_stmt)
         session.commit()
@@ -84,7 +90,7 @@ def save_entry(entry: FinanceEntry):
     # except (ValueError, OSError):
     #     return JSONResponse(status_code=400, content={"message": "A server error occurred, try again later."})
     except Exception as e:
-        session.rollback()
+        print(e)
         return JSONResponse(status_code=500, content={"message": str(e)})
     
 

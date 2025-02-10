@@ -1,6 +1,8 @@
 export interface SaveEntryFormData {
   amount: number;
   type: string;
+  time: number;
+  finance_type: "expense" | "income";
 }
 
 export interface SaveEntryActionResponse {

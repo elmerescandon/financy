@@ -7,3 +7,4 @@ class FinanceEntry(BaseModel):
     amount: float
     type: str
     note: Optional[str] = None
+    finance_type: str

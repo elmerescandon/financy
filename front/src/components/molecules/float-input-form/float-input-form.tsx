@@ -17,10 +17,11 @@ const FloatInputForm = ({
 }: FloatInputFormProps) => {
   return (
     <div className="mb-4 flex w-full flex-col gap-2">
-      <Label htmlFor={htmlFor} className="font-semibold">
+      <Label htmlFor={htmlFor} className="font-semibold max-md:text-base">
         {label}
       </Label>
       <Input
+        className="max-md:py-6 max-md:text-base"
         name={htmlFor}
         id={htmlFor}
         type="number"

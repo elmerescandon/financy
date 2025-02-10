@@ -10,4 +10,5 @@ export interface FinancyEntry {
   amount: number;
   type: string;
   note?: string;
+  finance_type?: "expense" | "income";
 }
