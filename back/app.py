@@ -22,7 +22,6 @@ finance_data = Table("finance_data", metadata, autoload_with=engine)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request, exc):
-     print(exc)
      return JSONResponse(status_code=422, content={"message": "Invalid data format"})
 
 @app.get("/")
