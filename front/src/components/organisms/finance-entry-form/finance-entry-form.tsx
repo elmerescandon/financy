@@ -4,6 +4,7 @@ import SmallLoader from "@/components/atoms/small-loader";
 import { DateTimePicker } from "@/components/molecules/date-input-form/date-input-form";
 import FloatInputForm from "@/components/molecules/float-input-form/float-input-form";
 import SelectForm from "@/components/molecules/select-input-form/select-input-form";
+import SingleTextInputForm from "@/components/molecules/single-text-input-form/single-text-input-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -15,7 +16,10 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { SaveEntryActionResponse } from "@/types/save-entry-form";
 import React, { useActionState, useEffect, useState } from "react";
+import { Dropdown } from "react-day-picker";
 import { useFormStatus } from "react-dom";
+import FinanceEntryFormExtra from "../finance-entry-form-extra/finance-entry-form-extra";
+import { Separator } from "@/components/ui/separator";
 
 const initialState: SaveEntryActionResponse = {
   success: false,
@@ -40,10 +44,8 @@ function SubmitButton() {
 
 const FinanceEntryForm = () => {
   const [state, formAction] = useActionState(saveEntry, initialState);
-  const [optional, setOptional] = useState(false);
-  const [showDate, setShowDate] = useState(false);
+  const [expandOptions, setExpandOptions] = useState(false);
   const { toast } = useToast();
-  const [date, setDate] = useState<Date>();
 
   useEffect(() => {
     if (state.success) {
@@ -82,34 +84,11 @@ const FinanceEntryForm = () => {
             placeholder="Select a type"
             error={state.errors?.type}
           />
-          <div className="mb-4">
-            {!showDate && (
-              <Button
-                type="button"
-                variant={"secondary"}
-                onClick={() => setShowDate(true)}
-                className="text-sm text-gray-800 min-w-[10rem]"
-              >
-                Add date
-              </Button>
-            )}
-            {showDate && (
-              <DateTimePicker
-                label="Date"
-                htmlFor="time"
-                error={state.errors?.time}
-              />
-            )}
-          </div>
+          {/* <Separator /> */}
+          <FinanceEntryFormExtra state={state} />
           <SubmitButton />
         </form>
-        {optional && (
-          <FloatInputForm
-            label="Description"
-            htmlFor="description"
-            placeholder="Add a description"
-          />
-        )}
+
       </CardContent>
     </Card>
   );

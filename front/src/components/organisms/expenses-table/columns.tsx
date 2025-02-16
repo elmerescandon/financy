@@ -2,6 +2,7 @@
 
 import { financeOptions } from "@/lib/constants";
 import { ColumnDef } from "@tanstack/react-table";
+import { format } from "date-fns";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
@@ -19,14 +20,7 @@ export const columns: ColumnDef<Expense>[] = [
     cell: ({ row }) => {
       const time = parseFloat(row.getValue("time")) * 1000;
       const limaTime = new Date(time);
-      return limaTime.toLocaleString("en-US", {
-        weekday: "short",
-        year: "2-digit",
-        month: "short",
-        day: "2-digit",
-        hour: "2-digit",
-        minute: "numeric",
-      });
+      return format(limaTime, "PPPP");
     },
     enableResizing: false,
     size: 30,
@@ -34,6 +28,10 @@ export const columns: ColumnDef<Expense>[] = [
   {
     accessorKey: "amount",
     header: "Amount",
+    cell: ({ row }) => {
+      const amount = row.getValue("amount");
+      return amount ? `S/.${amount}` : "-";
+    }
   },
   {
     accessorKey: "type",

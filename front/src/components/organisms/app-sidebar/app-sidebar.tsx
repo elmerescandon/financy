@@ -1,4 +1,4 @@
-import { PlusCircleIcon, BookOpen } from "lucide-react";
+import { PlusCircleIcon, BookOpen, ChevronDown } from "lucide-react";
 
 import {
   Sidebar,
@@ -6,10 +6,14 @@ import {
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
+  SidebarHeader,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { DropdownMenu, DropdownMenuContent } from "@/components/ui/dropdown-menu";
+import { DropdownMenuItem, DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
+import { ModeToggle } from "@/components/atoms/theme-select";
 
 // Menu items.
 const items = [
@@ -28,6 +32,13 @@ const items = [
 export function AppSidebar() {
   return (
     <Sidebar>
+      <SidebarHeader>
+        <SidebarMenu>
+          <SidebarMenuItem>
+            <ModeToggle />
+          </SidebarMenuItem>
+        </SidebarMenu>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Financy</SidebarGroupLabel>

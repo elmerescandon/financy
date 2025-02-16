@@ -42,8 +42,9 @@ export function DateTimePicker({ label, htmlFor, error }: DateTimePickerProps) {
           {error && <p className="text-red-500 text-sm mt-1">{error.join(", ")}</p>}
         </div>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0" align="start">
+      <PopoverContent className="w-auto" align="start">
         <Calendar
+          className="my-4"
           mode="single"
           selected={date}
           onSelect={setDate}

@@ -3,6 +3,7 @@ export interface SaveEntryFormData {
   type: string;
   time: number;
   finance_type: "expense" | "income";
+  note?: string;
 }
 
 export interface SaveEntryActionResponse {

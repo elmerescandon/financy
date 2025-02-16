@@ -29,6 +29,7 @@ const saveEntrySchema = z.object({
   finance_type: z.string({
     message: "Invalid finance type",
   }),
+  note: z.string().optional(),
 });
 
 export async function saveEntry(
@@ -39,11 +40,13 @@ export async function saveEntry(
   try {
     const amountString = formData.get("amount") as string;
     const timeString = formData.get("time") as string | null;
+    const noteString = formData.get("note") as string | undefined;
     const rawData: SaveEntryFormData = {
       amount: parseFloat(amountString || ""),
       type: formData.get("type") as string,
       time: timeString ? parseFloat(timeString.toString() || "") / 1000 : +Date.now() / 1000,
       finance_type: "expense",
+      note: noteString,
     };
 
     const validatedData = saveEntrySchema.safeParse(rawData);
@@ -61,7 +64,8 @@ export async function saveEntry(
       time: validatedData.data.time,
       amount: validatedData.data.amount,
       type: validatedData.data.type,
-      finance_type: "expense"
+      finance_type: "expense",
+      note: validatedData.data.note,
     });
 
 
