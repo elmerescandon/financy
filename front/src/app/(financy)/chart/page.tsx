@@ -1,7 +1,7 @@
 "use client"
 import FilterSelect from '@/components/molecules/filter-select/filter-select'
 import FinanceDateFilter from '@/components/organisms/finance-date-filter/finance-date-filter'
-import { FinanceEntryChart } from '@/components/organisms/finance-entry-chart/finance-entry-chart'
+import FinanceEntryChart from '@/components/organisms/finance-entry-chart/finance-entry-chart'
 import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useTable } from '@/hooks/useTable'

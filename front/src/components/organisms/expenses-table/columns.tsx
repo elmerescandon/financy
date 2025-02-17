@@ -1,19 +1,15 @@
 "use client";
 
 import { financeOptions } from "@/lib/constants";
+import { FinancyEntry } from "@/services/Financy.type";
 import { ColumnDef } from "@tanstack/react-table";
 import { format } from "date-fns";
 
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
-export type Expense = {
-  time: number;
-  amount: number;
-  type: string;
-  note?: string;
-};
 
-export const columns: ColumnDef<Expense>[] = [
+
+export const columns: ColumnDef<FinancyEntry>[] = [
   {
     accessorKey: "time",
     header: "Time",

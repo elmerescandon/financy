@@ -13,7 +13,7 @@ type FinanceEntryChartProps = {
     chartData: FinancyEntry[]
 }
 
-export function FinanceEntryChart({
+function FinanceEntryChart({
     chartData
 }: FinanceEntryChartProps) {
 
@@ -83,3 +83,5 @@ export function FinanceEntryChart({
 
     )
 }
+
+export default FinanceEntryChart
