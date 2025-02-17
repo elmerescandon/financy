@@ -53,7 +53,7 @@ function FinanceEntryChart({
                             />
                             <CartesianGrid vertical={false} />
                             <ChartLegend content={<ChartLegendContent />} />
-                            <Bar dataKey="amount" fill="var(--color-amount)" radius={8} >
+                            <Bar dataKey="amount" fill="var(--color-breakfast)" radius={8} >
                                 <LabelList
                                     position="top"
                                     offset={5}
