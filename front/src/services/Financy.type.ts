@@ -9,6 +9,13 @@ export interface FinancyEntry {
   time: number;
   amount: number;
   type: string;
-  note?: string;
+  note?: string | null;
   finance_type?: "expense" | "income";
+}
+
+
+export interface FinancyFilter {
+  startDate: number;
+  endDate: number;
+  expenseTypes: string[];
 }

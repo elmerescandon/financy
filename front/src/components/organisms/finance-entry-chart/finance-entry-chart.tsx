@@ -1,42 +1,85 @@
 "use client"
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
+import { FinancyEntry } from "@/services/Financy.type"
+import { useTable } from "@/hooks/useTable"
+import { CoinsIcon, Loader2, TrendingUp } from "lucide-react"
+import { ChartConfigKey, chartFinancyConfig, financeOptions } from "@/lib/constants"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 
-const chartConfig = {
-    desktop: {
-        label: "Desktop",
-        color: "#2563eb",
-    },
-    mobile: {
-        label: "Mobile",
-        color: "#60a5fa",
-    },
-} satisfies ChartConfig
+
 
 type FinanceEntryChartProps = {
-    chartData: any[]
+    chartData: FinancyEntry[]
 }
-
 
 export function FinanceEntryChart({
     chartData
 }: FinanceEntryChartProps) {
+
+    const { loadingChart } = useTable();
+    const groupedData = chartData.reduce((acc, entry) => {
+        const { type, amount } = entry;
+        if (!acc[type]) {
+            acc[type] = { type, amount: 0 };
+        }
+        acc[type].amount += amount;
+        return acc;
+    }, {} as Record<string, { type: string; amount: number }>);
+
+    const processedData = Object.values(groupedData);
+
     return (
-        <ChartContainer config={chartConfig} className="min-h-[200px] w-full">
-            <BarChart accessibilityLayer data={chartData}>
-                <ChartTooltip content={<ChartTooltipContent />} />
-                <XAxis
-                    dataKey="month"
-                    tickLine={false}
-                    tickMargin={10}
-                    axisLine={false}
-                    tickFormatter={(value) => value.slice(0, 3)}
-                />
-                <CartesianGrid vertical={false} />
-                <ChartLegend content={<ChartLegendContent />} />
-                <Bar dataKey="desktop" fill="var(--color-desktop)" radius={4} />
-                <Bar dataKey="mobile" fill="var(--color-mobile)" radius={4} />
-            </BarChart>
-        </ChartContainer>
+        <div>
+            <Card className="max-md:max-w-[340px] mx-auto" >
+                <CardHeader>
+                    <CardTitle>Bar Chart - Amount spend by type</CardTitle>
+                </CardHeader>
+                <CardContent>
+
+                    {loadingChart && (
+                        <div className="flex justify-center items-center h-full">
+                            <Loader2 className="w-8 h-8 animate-spin" />
+                        </div>
+                    )}
+                    {chartData.length > 0 && !loadingChart && (<ChartContainer config={chartFinancyConfig} className="min-h-[400px] w-full max-md:min-h-[300px]">
+                        <BarChart accessibilityLayer data={processedData}>
+                            <ChartTooltip content={<ChartTooltipContent />} />
+                            <XAxis
+                                dataKey="type"
+                                tickLine={false}
+                                tickFormatter={(value) => chartFinancyConfig[value as ChartConfigKey]?.label || value}
+                                axisLine={false}
+                            />
+                            <CartesianGrid vertical={false} />
+                            <ChartLegend content={<ChartLegendContent />} />
+                            <Bar dataKey="amount" fill="var(--color-amount)" radius={8} >
+                                <LabelList
+                                    position="top"
+                                    offset={5}
+                                    className="fill-foreground"
+                                    fontSize={12}
+                                    formatter={(value: any) => `S/.${value.toLocaleString()}`}
+                                />
+                            </Bar>
+                        </BarChart>
+                    </ChartContainer>)
+                    }
+                    {chartData.length === 0 && !loadingChart && (
+                        <div className="flex justify-center items-center h-[200px]">
+                            <p className="text-sm text-gray-400">No data to display</p>
+                        </div>
+                    )}
+
+                </CardContent>
+                <CardFooter className="flex-col items-start gap-2 text-sm">
+                    <div className="flex items-center gap-2">
+                        <CoinsIcon className="w-4 h-4" />
+                        <span>Total Amount: S/.{processedData.reduce((sum, entry) => sum + entry.amount, 0).toLocaleString()}</span>
+                    </div>
+                </CardFooter>
+            </Card>
+        </div>
+
     )
 }

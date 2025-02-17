@@ -1,22 +1,25 @@
-import React, { createContext, useContext, useReducer, ReactNode } from 'react';
+import { financeOptions } from '@/lib/constants';
+import { FinancyService } from '@/services/Financy.service';
+import { FinancyEntry, FinancyFilter } from '@/services/Financy.type';
+import React, { createContext, useContext, useReducer, ReactNode, useEffect, useState } from 'react';
 import { DateRange } from 'react-day-picker';
 
 type DateRangeFilter = { dateRange: DateRange | undefined, type: "calendar" | "fixed" } | undefined;
 
 interface TableState {
     dateRangeFilter: DateRangeFilter
-    typeFilter: string | null;
-    tableData: any[];
+    typeFilter: string[] | null;
+    tableData: FinancyEntry[];
 }
 
 type Action =
     | { type: 'SET_DATE_RANGE_FILTER'; payload: DateRangeFilter }
-    | { type: 'SET_TYPE_FILTER'; payload: string | null }
+    | { type: 'SET_TYPE_FILTER'; payload: string[] | null }
     | { type: 'SET_TABLE_DATA'; payload: any[] };
 
 const initialState: TableState = {
     dateRangeFilter: undefined,
-    typeFilter: null,
+    typeFilter: Object.entries(financeOptions).map(([key, value]) => (key)),
     tableData: []
 };
 
@@ -59,11 +62,14 @@ export const useTable = () => {
         throw new Error('useTable must be used within a TableProvider');
     }
 
+    const service = FinancyService.getInstance()
+    const [loadingChart, setLoadingChart] = useState<boolean>(false);
+
     const setDateRangeFilter = (DateRange: DateRange, type: "calendar" | "fixed") => {
         dispatch({ type: 'SET_DATE_RANGE_FILTER', payload: { dateRange: DateRange, type: type } });
     }
 
-    const setTypeFilter = (type: string | null) => {
+    const setTypeFilter = (type: string[] | null) => {
         dispatch({ type: 'SET_TYPE_FILTER', payload: type });
     }
 
@@ -75,5 +81,43 @@ export const useTable = () => {
     const { state, dispatch } = context;
     const { dateRangeFilter, typeFilter, tableData } = state;
 
-    return { dateRangeFilter, setDateRangeFilter, typeFilter, setTypeFilter, tableData, setTableData };
+    const updateTable = async () => {
+        try {
+            setLoadingChart(true);
+            if (!dateRangeFilter?.dateRange?.from || !dateRangeFilter?.dateRange?.to || !typeFilter) {
+                return;
+            }
+
+            const expenseFilter = {
+                end_date: +dateRangeFilter?.dateRange?.to,
+                start_date: +dateRangeFilter?.dateRange?.from,
+                expense_types: typeFilter
+            }
+            const data = await fetch('/api/get-entries/filter', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    "userId": "d09bd4f7-e50c-486c-8b04-93c6540f48bb",
+                    expenseFilter
+                }
+                ),
+            })
+
+            if (!data.ok) {
+                throw new Error("Failed to process expenses filter request.");
+            }
+            const { entries } = await data.json();
+            setTableData(entries);
+            setLoadingChart(false);
+        } catch (error) {
+            setLoadingChart(false);
+            console.error(error);
+        }
+    };
+
+
+
+    return { dateRangeFilter, setDateRangeFilter, typeFilter, setTypeFilter, tableData, setTableData, updateTable, loadingChart };
 };

@@ -24,6 +24,12 @@ export function FilterDateRange({
 
     const handleDateChange = useCallback((dateRange: DateRange) => {
         setDate(dateRange)
+        if (dateRange.from) {
+            dateRange.from.setHours(0, 0, 0, 0)
+        }
+        if (dateRange.to) {
+            dateRange.to.setHours(23, 59, 59, 999)
+        }
         setDateRangeFilter(dateRange, "calendar")
     }, [date, setDateRangeFilter])
 
@@ -41,7 +47,7 @@ export function FilterDateRange({
                         id="date"
                         variant={"outline"}
                         className={cn(
-                            "w-[300px] justify-start text-left font-normal",
+                            "w-[300px] justify-start text-left font-normal max-md:w-full",
                             !date && "text-muted-foreground"
                         )}
                     >

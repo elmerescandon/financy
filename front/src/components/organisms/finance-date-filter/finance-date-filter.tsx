@@ -13,25 +13,36 @@ const FinanceDateFilter = () => {
     const handleChangeFixedDate = (value: "today" | "yesterday" | "week" | "month") => {
         setFixedDate(value);
         if (value) {
-            if (value === "today") {
-                setDate({ from: new Date(), to: new Date() }, "fixed")
-            } else if (value === "yesterday") {
-                const yesterday = new Date();
-                yesterday.setDate(yesterday.getDate() - 1);
-                setDate({ from: yesterday, to: yesterday }, "fixed")
-            } else if (value === "week") {
-                const today = new Date();
-                const day = today.getDay();
-                const diff = today.getDate() - day + (day === 0 ? -6 : 1); // adjust when day is sunday
-                const from = new Date(today.setDate(diff));
-                const to = new Date(today.setDate(from.getDate() + 6));
-                setDate({ from, to }, "fixed")
-            } else if (value === "month") {
-                const today = new Date();
-                const from = new Date(today.getFullYear(), today.getMonth(), 1);
-                const to = new Date(today.getFullYear(), today.getMonth() + 1, 0);
-                setDate({ from, to }, "fixed")
+            const from = new Date();
+            const to = new Date();
+            switch (value) {
+                case "today":
+                    from.setHours(0, 0, 0, 0);
+                    to.setHours(23, 59, 59, 999);
+                    break;
+                case "yesterday":
+                    from.setDate(from.getDate() - 1);
+                    from.setHours(0, 0, 0, 0);
+                    to.setDate(to.getDate() - 1);
+                    to.setHours(23, 59, 59, 999);
+                    break;
+                case "week":
+                    const day = from.getDay();
+                    const diff = from.getDate() - day + (day === 0 ? -6 : 1);
+                    from.setDate(diff);
+                    from.setHours(0, 0, 0, 0);
+                    to.setDate(from.getDate() + 6);
+                    to.setHours(23, 59, 59, 999);
+                    break;
+                case "month":
+                    from.setDate(1);
+                    from.setHours(0, 0, 0, 0);
+                    to.setMonth(to.getMonth() + 1);
+                    to.setDate(0);
+                    to.setHours(23, 59, 59, 999);
+                    break;
             }
+            setDate({ from, to }, "fixed");
         }
     }
 
@@ -45,8 +56,8 @@ const FinanceDateFilter = () => {
     return (
         <div className='mb-4'>
             <div className="flex flex-col md:flex-row gap-4 items-center">
-                <FilterDateRange className="w-full md:w-auto" />
-                <ToggleGroup className="flex border rounded-md" type="single" value={fixedDate} onValueChange={(value) => handleChangeFixedDate(value as any)}>
+                <FilterDateRange className="w-full max-md:w-full" />
+                <ToggleGroup className="flex border rounded-md max-md:w-full" type="single" value={fixedDate} onValueChange={(value) => handleChangeFixedDate(value as any)}>
                     <ToggleGroupItem value="today" aria-label="Toggle Today" className="px-4 rounded-md w-full" >
                         Today
                     </ToggleGroupItem>

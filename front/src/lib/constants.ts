@@ -1,3 +1,5 @@
+import { ChartConfig } from "@/components/ui/chart";
+
 export const financeOptions = {
   breakfast: "Breakfast",
   lunch: "Lunch",
@@ -14,3 +16,14 @@ export const financeOptions = {
   selfCare: "Self care",
   decoration: "Decoration",
 };
+
+export const chartFinancyConfig = {
+  amount: {
+    label: "Breakfast",
+    color: "#2563eb",
+  },
+
+} satisfies ChartConfig;
+
+
+export type ChartConfigKey = keyof typeof chartFinancyConfig;

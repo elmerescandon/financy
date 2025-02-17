@@ -8,6 +8,9 @@ from classes.Finance import FinanceEntry
 import datetime
 from fastapi.responses import JSONResponse
 import uuid
+from typing import List, Optional
+from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
 
 # Load environment variables from .env file
 load_dotenv()
@@ -69,6 +72,51 @@ def get_entries(user_id: str):
         return JSONResponse(status_code=500, content={"message":str(e)})
 
 
+class ExpenseQuery(BaseModel):
+    start_date: datetime.datetime
+    end_date: datetime.datetime
+    expense_types: List[str]
+
+@app.post("/get-expenses-range/{user_id}")
+def get_entries_range(user_id: str, query: ExpenseQuery):
+    """
+        Get entries from the database within a date-time range and specified expense types
+    """
+    try:
+        print(user_id)
+        print(query)
+
+        query_stmt = finance_data.select().where(
+            (finance_data.c.user_id == user_id) &
+            (finance_data.c.finance_type == 'expense') &
+            (finance_data.c.time >= query.start_date) &
+            (finance_data.c.time <= query.end_date) &
+            (finance_data.c.type.in_(query.expense_types))
+        ).order_by(finance_data.c.time.desc())
+        
+        result = session.execute(query_stmt).fetchall()
+        columns = finance_data.columns.keys()
+        column_index_map = {column: index for index, column in enumerate(columns)}
+        entries = [
+            {
+                "id": row[column_index_map["id"]],
+                "time": row[column_index_map["time"]].timestamp(),
+                "amount": row[column_index_map["amount"]],
+                "type": row[column_index_map["type"]],
+                "note": row[column_index_map["note"]],
+                "finance_type": row[column_index_map["finance_type"]],
+            }
+            for row in result
+        ]
+
+        if not entries:
+            return JSONResponse(status_code=200, content={"entries": [], "message": "No entries found"})
+        
+        return JSONResponse(status_code=200, content={"entries": entries, "message": "Entries fetched successfully"})
+
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": str(e)})
 
 
 @app.post("/save-entry")

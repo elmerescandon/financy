@@ -2,30 +2,23 @@
 import FilterSelect from '@/components/molecules/filter-select/filter-select'
 import FinanceDateFilter from '@/components/organisms/finance-date-filter/finance-date-filter'
 import { FinanceEntryChart } from '@/components/organisms/finance-entry-chart/finance-entry-chart'
+import { Button } from '@/components/ui/button'
 import { Separator } from '@/components/ui/separator'
 import { useTable } from '@/hooks/useTable'
 import React, { use, useEffect } from 'react'
 
 const page = () => {
 
-    const { dateRangeFilter } = useTable();
+    const { tableData, updateTable } = useTable();
 
-    const chartData = [
-        { month: "January", desktop: 186, mobile: 80 },
-        { month: "February", desktop: 305, mobile: 200 },
-        { month: "March", desktop: 237, mobile: 120 },
-        { month: "April", desktop: 73, mobile: 190 },
-        { month: "May", desktop: 209, mobile: 130 },
-        { month: "June", desktop: 214, mobile: 140 },
-    ]
     return (
-        <div>
+        <div className='max-w-5xl w-full'>
             <div className='py-4'>
                 <FilterSelect />
                 <FinanceDateFilter />
+                <Button variant="default" onClick={updateTable}>Update Table</Button>
             </div>
-            {/* <FinanceEntryChart chartData={chartData} /> */}
-
+            <FinanceEntryChart chartData={tableData} />
         </div>
     )
 }

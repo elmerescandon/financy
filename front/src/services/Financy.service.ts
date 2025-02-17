@@ -1,4 +1,4 @@
-import { FinancyEntry, FinancyResponse } from "./Financy.type";
+import { FinancyEntry, FinancyFilter, FinancyResponse } from "./Financy.type";
 
 export class FinancyService {
   private static instance: FinancyService;
@@ -49,5 +49,27 @@ export class FinancyService {
     } catch (error) {
       throw error;
     }
+  }
+
+  async getExpensesFilter(userId: string, expenseFilter: FinancyFilter) {
+    try {
+      const url = process.env.NEXT_PUBLIC_PANDORA_API_ENDPOINT;
+      const response = await fetch(`${url}/get-expenses-range/${userId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(expenseFilter),
+      });
+      const data = await response.json();
+      if (data.entries) {
+        return data;
+      } else {
+        throw new Error(data.message);
+      }
+    } catch (error) {
+      throw error;
+    }
+
   }
 }

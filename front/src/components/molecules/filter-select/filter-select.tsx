@@ -1,27 +1,26 @@
 "use client";
-import React, { useState } from "react";
-import { Cat, Dog, Fish, Rabbit, Turtle } from "lucide-react";
+import React from "react";
 import { MultiSelect } from "@/components/ui/multi-select";
-
-
-const frameworksList = [
-    { value: "react", label: "React", icon: Turtle },
-    { value: "angular", label: "Angular", icon: Cat },
-    { value: "vue", label: "Vue", icon: Dog },
-    { value: "svelte", label: "Svelte", icon: Rabbit },
-    { value: "ember", label: "Ember", icon: Fish },
-];
+import { financeOptions } from "@/lib/constants";
+import { useTable } from "@/hooks/useTable";
 
 
 const FilterSelect = () => {
-    const [selectedFrameworks, setSelectedFrameworks] = useState<string[]>(frameworksList.map((framework) => framework.value));
+    const { typeFilter, setTypeFilter } = useTable();
+    if (!typeFilter) {
+        return null;
+    }
+    const financeOptionsList = Object.entries(financeOptions).map(([key, value]) => ({
+        value: key,
+        label: value,
+    }));
 
     return (
         <MultiSelect
-            className="mb-4 max-w-sm"
-            options={frameworksList}
-            onValueChange={setSelectedFrameworks}
-            defaultValue={selectedFrameworks}
+            className="mb-4 max-w-sm max-md:max-w-md max-md:w-full"
+            options={financeOptionsList}
+            onValueChange={setTypeFilter}
+            defaultValue={typeFilter}
             placeholder="Select expense type"
             variant="inverted"
             animation={2}

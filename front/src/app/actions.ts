@@ -29,7 +29,7 @@ const saveEntrySchema = z.object({
   finance_type: z.string({
     message: "Invalid finance type",
   }),
-  note: z.string().optional(),
+  note: z.string().nullable().optional(),
 });
 
 export async function saveEntry(
