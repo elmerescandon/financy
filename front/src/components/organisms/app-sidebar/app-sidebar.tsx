@@ -1,4 +1,4 @@
-import { PlusCircleIcon, BookOpen, ChevronDown } from "lucide-react";
+import { PlusCircleIcon, BookOpen, ChevronDown, ChartBar } from "lucide-react";
 
 import {
   Sidebar,
@@ -26,6 +26,11 @@ const items = [
     title: "View Expenses",
     url: "/view",
     icon: BookOpen,
+  },
+  {
+    title: "View Chart",
+    url: "/chart",
+    icon: ChartBar,
   },
 ];
 
