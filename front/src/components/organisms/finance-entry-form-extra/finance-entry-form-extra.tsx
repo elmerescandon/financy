@@ -1,4 +1,4 @@
-import { DateTimePicker } from '@/components/molecules/date-input-form/date-input-form'
+import { DatePicker } from '@/components/molecules/date-input-form/date-input-form'
 import SingleTextInputForm from '@/components/molecules/single-text-input-form/single-text-input-form'
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion'
 import { SaveEntryActionResponse } from '@/types/save-entry-form'
@@ -21,7 +21,8 @@ const FinanceEntryFormExtra = ({ state }: FinanceEntryFormExtraProps) => {
                 </AccordionTrigger>
                 <AccordionContent>
                     <div className='flex gap-4 flex-col mx-2'>
-                        <DateTimePicker
+                        {/* TODO: Fix bug -> when you don't include a date but a note, data is not sent */}
+                        <DatePicker
                             label="Date"
                             htmlFor="time"
                             error={state.errors?.time}

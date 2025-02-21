@@ -1,4 +1,4 @@
-import { PlusCircleIcon, BookOpen, ChevronDown, ChartBar } from "lucide-react";
+import { PlusCircleIcon, BookOpen, ChevronDown, ChartBar, DollarSign } from "lucide-react";
 
 import {
   Sidebar,
@@ -32,6 +32,11 @@ const items = [
     url: "/chart",
     icon: ChartBar,
   },
+  {
+    title: "Set Income",
+    url: "/income",
+    icon: DollarSign,
+  }
 ];
 
 export function AppSidebar() {
@@ -49,6 +54,9 @@ export function AppSidebar() {
           <SidebarGroupLabel>Financy</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
+              <SidebarGroup>
+
+              </SidebarGroup>
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>

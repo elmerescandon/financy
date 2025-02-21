@@ -8,3 +8,4 @@ class FinanceEntry(BaseModel):
     type: str
     note: Optional[str] = None
     finance_type: str
+    to_time: Optional[float] = None

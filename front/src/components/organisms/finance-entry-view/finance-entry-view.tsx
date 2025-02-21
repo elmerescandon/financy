@@ -14,6 +14,7 @@ export const revalidate = 0;
 
 const FinanceEntryView = async () => {
   try {
+    // TODO: Make a pagination for the entries
     const service = FinancyService.getInstance();
     const response = await service.getExpenses(
       "d09bd4f7-e50c-486c-8b04-93c6540f48bb"

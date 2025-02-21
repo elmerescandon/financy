@@ -1,10 +1,8 @@
 "use client";
 import { saveEntry } from "@/app/actions";
 import SmallLoader from "@/components/atoms/small-loader";
-import { DateTimePicker } from "@/components/molecules/date-input-form/date-input-form";
 import FloatInputForm from "@/components/molecules/float-input-form/float-input-form";
 import SelectForm from "@/components/molecules/select-input-form/select-input-form";
-import SingleTextInputForm from "@/components/molecules/single-text-input-form/single-text-input-form";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -16,10 +14,9 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import { SaveEntryActionResponse } from "@/types/save-entry-form";
 import React, { useActionState, useEffect, useState } from "react";
-import { Dropdown } from "react-day-picker";
 import { useFormStatus } from "react-dom";
 import FinanceEntryFormExtra from "../finance-entry-form-extra/finance-entry-form-extra";
-import { Separator } from "@/components/ui/separator";
+import { financeOptions } from "@/lib/constants";
 
 const initialState: SaveEntryActionResponse = {
   success: false,
@@ -27,7 +24,6 @@ const initialState: SaveEntryActionResponse = {
 };
 
 function SubmitButton() {
-  "use client";
   const { pending } = useFormStatus();
 
   return (
@@ -83,6 +79,10 @@ const FinanceEntryForm = () => {
             htmlFor="type"
             placeholder="Select a type"
             error={state.errors?.type}
+            options={Object.entries(financeOptions).map(([key, value]) => ({
+              key,
+              value,
+            }))}
           />
           {/* <Separator /> */}
           <FinanceEntryFormExtra state={state} />

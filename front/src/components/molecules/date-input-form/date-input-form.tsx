@@ -7,13 +7,13 @@ import { format } from "date-fns"
 import { Label } from "@radix-ui/react-label";
 import { Input } from "@/components/ui/input";
 
-type DateTimePickerProps = {
+type DateTimeProps = {
   label: string;
   htmlFor: string;
   error?: string[];
 }
 
-export function DateTimePicker({ label, htmlFor, error }: DateTimePickerProps) {
+export function DatePicker({ label, htmlFor, error }: DateTimeProps) {
   const [date, setDate] = React.useState<Date>()
 
   return (

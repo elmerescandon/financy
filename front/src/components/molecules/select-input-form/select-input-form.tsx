@@ -14,6 +14,7 @@ type SelectFormProps = {
   placeholder: string;
   htmlFor: string;
   error?: string[];
+  options: { key: string; value: string }[];
 };
 
 const SelectForm = ({
@@ -21,6 +22,7 @@ const SelectForm = ({
   placeholder,
   htmlFor,
   error,
+  options,
 }: SelectFormProps) => {
   return (
     <div className="mb-4 flex w-full flex-col gap-2">
@@ -32,14 +34,14 @@ const SelectForm = ({
           form=""
           name={htmlFor}
           id={htmlFor}
-          className="max-md:py-6 max-md:text-base"
+          className="max-md:py-6 max-md:text-base data-[placeholder]:text-muted-foreground"
         >
           <SelectValue placeholder={placeholder} />
         </SelectTrigger>
         <SelectContent>
-          {Object.entries(financeOptions).map(([key, value]) => (
-            <SelectItem key={key} value={key}>
-              {value}
+          {options.map((option) => (
+            <SelectItem key={option.key} value={option.key}>
+              {option.value}
             </SelectItem>
           ))}
         </SelectContent>

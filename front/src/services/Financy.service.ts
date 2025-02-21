@@ -1,4 +1,6 @@
-import { FinancyEntry, FinancyFilter, FinancyResponse } from "./Financy.type";
+import { SetIncomeFormData } from "@/types/set-income-form";
+import { FinancyEntry, FinancyFilter, FinancyResponse, FinancySetIncome } from "./Financy.type";
+import { use } from "react";
 
 export class FinancyService {
   private static instance: FinancyService;
@@ -71,5 +73,34 @@ export class FinancyService {
       throw error;
     }
 
+  }
+
+  async setIncome(entry: FinancySetIncome): Promise<FinancyResponse> {
+    try {
+      const url = process.env.NEXT_PUBLIC_PANDORA_API_ENDPOINT;
+      console.log(url);
+      const response = await fetch(`${url}/set-income`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_id: entry.user_id,
+          time: entry.fromTime,
+          to_time: entry.toTime,
+          amount: entry.amount,
+          type: entry.frequency,
+          finance_type: entry.finance_type,
+        }),
+      });
+      console.log(response);
+      if (response.status !== 201) {
+        throw new Error("Failed to save entry, please try again later.");
+      }
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
   }
 }

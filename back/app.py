@@ -141,6 +141,26 @@ def save_entry(entry: FinanceEntry):
         print(e)
         return JSONResponse(status_code=500, content={"message": str(e)})
     
+@app.post("/set-income")
+def set_income(entry: FinanceEntry):
+    try:
+        print(entry)
+        user_id = uuid.UUID(entry.user_id)
+        insert_stmt = finance_data.insert().values(
+            time=datetime.datetime.fromtimestamp(float(entry.time)),
+            to_time=datetime.datetime.fromtimestamp(float(entry.to_time)),
+            amount=entry.amount,
+            type=entry.type,
+            user_id=user_id,
+            finance_type='income'
+        )
+        session.execute(insert_stmt)
+        session.commit()
+        return JSONResponse(status_code=201, content={"message": "Income entry saved successfully"})
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": str(e)})
+
 
 #! uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 
