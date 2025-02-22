@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.exceptions import RequestValidationError
 import os
 from dotenv import load_dotenv
@@ -36,24 +36,32 @@ Session = sessionmaker(bind=engine)
 session = Session()
 
 @app.get("/get-expenses/{user_id}")
-def get_entries(user_id: str):
+def get_entries(user_id: str, request: Request):
     """
-        Get the last 10 entries from the database
+        Get entries from the database with pagination
     """
-
     try:
-        print(user_id)
+        page = int(request.query_params.get('page', 1))
+        items_per_page = int(request.query_params.get('items_per_page', 50))
+        offset = (page - 1) * items_per_page
+
+        total_items_query = finance_data.select().where(
+            (finance_data.c.user_id == user_id) & 
+            (finance_data.c.finance_type == 'expense')
+        )
+        total_items = session.execute(total_items_query).rowcount
+
         query = finance_data.select().where(
             (finance_data.c.user_id == user_id) & 
             (finance_data.c.finance_type == 'expense')
-        ).order_by(finance_data.c.time.desc()).limit(10)
+        ).order_by(finance_data.c.time.desc()).offset(offset).limit(items_per_page)
         
         result = session.execute(query).fetchall()
         columns = finance_data.columns.keys()
         column_index_map = {column: index for index, column in enumerate(columns)}
         entries = [
             {
-                "id": row[column_index_map["id"]],	
+                "id": row[column_index_map["id"]],
                 "time": row[column_index_map["time"]].timestamp(),
                 "amount": row[column_index_map["amount"]],
                 "type": row[column_index_map["type"]],
@@ -63,13 +71,22 @@ def get_entries(user_id: str):
             for row in result
         ]
 
+        total_pages = (total_items + items_per_page - 1) // items_per_page
+
         if not entries:
             return JSONResponse(status_code=404, content={"message": "No entries found"})
         
-        return JSONResponse(status_code=200, content={"entries": entries, "message": "Entries fetched successfully"})	
+        return JSONResponse(status_code=200, content={
+            "entries": entries,
+            "message": "Entries fetched successfully",
+            "current_page": page,
+            "total_pages": total_pages,
+            "offset": offset,
+            "total_items": total_items
+        })
 
     except Exception as e:
-        return JSONResponse(status_code=500, content={"message":str(e)})
+        return JSONResponse(status_code=500, content={"message": str(e)})
 
 
 class ExpenseQuery(BaseModel):
