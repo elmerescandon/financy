@@ -36,8 +36,8 @@ export function ExpensesTable<TData, TValue>({
   });
 
   return (
-    <div >
-      <Table className="rounded-md border">
+    <div className="overflow-x-auto">
+      <Table className="min-w-full rounded-md border">
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
             <TableRow key={headerGroup.id}>
@@ -76,11 +76,10 @@ export function ExpensesTable<TData, TValue>({
                 No results.
               </TableCell>
             </TableRow>
-          )
-          }
-        </TableBody >
-      </Table >
+          )}
+        </TableBody>
+      </Table>
       <DataTablePagination table={table} />
-    </div >
+    </div>
   );
 }

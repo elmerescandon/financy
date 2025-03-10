@@ -1,5 +1,5 @@
 "use client"
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, ResponsiveContainer, XAxis } from "recharts"
 import { ChartConfig, ChartContainer, ChartLegend, ChartLegendContent, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart"
 import { FinancyEntry } from "@/services/Financy.type"
 import { useTable } from "@/hooks/useTable"
@@ -43,26 +43,32 @@ function FinanceEntryChart({
                         </div>
                     )}
                     {chartData.length > 0 && !loadingChart && (<ChartContainer config={chartFinancyConfig} className="min-h-[400px] w-full max-md:min-h-[300px]">
-                        <BarChart accessibilityLayer data={processedData}>
-                            <ChartTooltip content={<ChartTooltipContent />} />
-                            <XAxis
-                                dataKey="type"
-                                tickLine={false}
-                                tickFormatter={(value) => chartFinancyConfig[value as ChartConfigKey]?.label || value}
-                                axisLine={false}
-                            />
-                            <CartesianGrid vertical={false} />
-                            <ChartLegend content={<ChartLegendContent />} />
-                            <Bar dataKey="amount" fill="var(--color-breakfast)" radius={8} >
-                                <LabelList
-                                    position="top"
-                                    offset={5}
-                                    className="fill-foreground"
-                                    fontSize={12}
-                                    formatter={(value: any) => `S/.${value.toLocaleString()}`}
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart accessibilityLayer data={processedData} height={300} width={400}
+                                margin={{
+                                    top: 32,
+                                }}
+                            >
+                                <ChartTooltip content={<ChartTooltipContent />} />
+                                <XAxis
+                                    dataKey="type"
+                                    tickLine={false}
+                                    tickFormatter={(value) => chartFinancyConfig[value as ChartConfigKey]?.label || value}
+                                    axisLine={false}
                                 />
-                            </Bar>
-                        </BarChart>
+                                <CartesianGrid vertical={false} />
+                                <ChartLegend content={<ChartLegendContent />} />
+                                <Bar dataKey="amount" fill="var(--color-breakfast)" radius={8} >
+                                    <LabelList
+                                        position="top"
+                                        offset={5}
+                                        className="fill-foreground"
+                                        fontSize={12}
+                                        formatter={(value: any) => `S/.${value.toLocaleString()}`}
+                                    />
+                                </Bar>
+                            </BarChart>
+                        </ResponsiveContainer>
                     </ChartContainer>)
                     }
                     {chartData.length === 0 && !loadingChart && (
