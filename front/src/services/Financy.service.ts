@@ -103,4 +103,26 @@ export class FinancyService {
       throw error;
     }
   }
+
+  async deleteEntry(entryId: string): Promise<FinancyResponse> {
+    try {
+      const url = process.env.NEXT_PUBLIC_PANDORA_API_ENDPOINT;
+      const response = await fetch(`${url}/delete-entry/${entryId}`, {
+        method: "DELETE",
+      });
+
+      if (response.status === 404) {
+        throw new Error("Entry not found");
+      }
+
+      if (response.status !== 200) {
+        throw new Error("Failed to delete entry");
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      throw error;
+    }
+  }
 }

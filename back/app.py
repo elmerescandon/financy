@@ -18,6 +18,15 @@ load_dotenv()
 
 app = FastAPI()
 
+# Add CORS middleware
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 DATABASE_URL = os.getenv("LOCAL_POSTGRES_URL").replace("postgresql://", "postgresql+psycopg2://")
 engine = create_engine(DATABASE_URL)
 metadata = MetaData()
@@ -42,7 +51,7 @@ def get_entries(user_id: str, request: Request):
     """
     try:
         page = int(request.query_params.get('page', 1))
-        items_per_page = int(request.query_params.get('items_per_page', 50))
+        items_per_page = int(request.query_params.get('items_per_page', 100))
         offset = (page - 1) * items_per_page
 
         total_items_query = finance_data.select().where(
@@ -178,6 +187,20 @@ def set_income(entry: FinanceEntry):
         print(e)
         return JSONResponse(status_code=500, content={"message": str(e)})
 
+@app.delete("/delete-entry/{entry_id}")
+def delete_entry(entry_id: str):
+    try:
+        delete_stmt = finance_data.delete().where(finance_data.c.id == entry_id)
+        result = session.execute(delete_stmt)
+        session.commit()
+        
+        if result.rowcount == 0:
+            return JSONResponse(status_code=404, content={"message": "Entry not found"})
+            
+        return JSONResponse(status_code=200, content={"message": "Entry deleted successfully"})
+    except Exception as e:
+        print(e)
+        return JSONResponse(status_code=500, content={"message": str(e)})
 
 #! uvicorn app:app --host 0.0.0.0 --port 8000 --reload
 
